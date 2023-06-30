@@ -3,7 +3,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { UsersModule } from './user/user.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
-import { Logger } from '@nestjs/common';
+import { Logger, VersioningType } from '@nestjs/common';
 import { cfg } from './common/configs/env.config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
@@ -22,6 +22,15 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
+
+  app.enableVersioning({
+    type: VersioningType.URI,
+  });
+  app.enableCors({
+    allowedHeaders: "*",
+    origin: "*",
+    credentials: true,
+  });
 
   await app.listen(cfg('PORT') || 3002, () => {
     Logger.log(

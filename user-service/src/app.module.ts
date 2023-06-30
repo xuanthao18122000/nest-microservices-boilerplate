@@ -6,6 +6,7 @@ import { join } from 'path';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UsersModule } from './user/user.module';
+import { dataSourceOptions } from './common/configs/typeorm.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -13,26 +14,10 @@ import { UsersModule } from './user/user.module';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
-      // bigNumberStrings: false,
-      type: 'postgres',
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-      entities: [join(__dirname, 'database', '*.schema.{js,ts}')],
-      extra: {
-        timezone: 'Asia/Ho_Chi_Minh',
-      },
-      synchronize: true,
-      autoLoadEntities: true,
-      maxQueryExecutionTime: 1000,
-      logging: 'all',
-      logger: 'file',
-    }),
+			...dataSourceOptions,
+		}),
     ScheduleModule.forRoot(),
     UsersModule
-
   ],
   controllers: [AppController],
   providers: [
