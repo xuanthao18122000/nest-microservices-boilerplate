@@ -5,7 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { BaseEntity } from './base.entity';
+import { BaseEntity } from './base.schema';
 
 @Entity({ name: 'users' })
 export class User extends BaseEntity {
@@ -16,10 +16,10 @@ export class User extends BaseEntity {
   password: string;
 
   @Column({ type: 'text', name: 'full_name' })
-  fullName?: string;
+  fullName: string;
 
   @Column({ type: 'varchar', name: 'phone_number', nullable: true })
-  phoneNumber?: string;
+  phoneNumber: string;
 
   @Column({ nullable: true })
   token: string;
@@ -28,28 +28,28 @@ export class User extends BaseEntity {
   logs: object;
 
   @Column({ type: 'int', nullable: true })
-  gender?: number;
+  gender: number;
 
   @Column({ type: 'varchar', nullable: true })
-  address?: string;
+  address: string;
 
   @Column({ type: 'int', default: -1 })
   status: number;
 
   public updatedAt: Date;
 
-  constructor(data: any = null) {
-    if (data) {
-      super()
-      this.id = data.id || null;
-      this.email = data.email;
-      this.address = data.address;
-      this.fullName = data.fullName;
-      this.phoneNumber = data.phoneNumber;
-      this.gender = data.gender;
-      this.status = data.status;
-    }
-  }
+  // constructor(data: any = null) {
+  //   if (data) {
+  //     super()
+  //     this.id = data.id || null;
+  //     this.email = data.email;
+  //     this.address = data.address;
+  //     this.fullName = data.fullName;
+  //     this.phoneNumber = data.phoneNumber;
+  //     this.gender = data.gender;
+  //     this.status = data.status;
+  //   }
+  // }
 
   serialize() {
     return {

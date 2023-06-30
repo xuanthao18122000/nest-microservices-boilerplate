@@ -1,20 +1,32 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { UsersModule } from './user/user.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { AppModule } from './app.module';
+import { Logger } from '@nestjs/common';
+import { cfg } from './common/configs/env.config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    UsersModule,
-    {
-      transport: Transport.RMQ,
-      options: {
-        urls: ['amqp://localhost:5672'],
-        queue: 'user_queue',
-        queueOptions: {
-          durable: false,
-        },
-      },
-    },
-  );
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true, // 👈
+    logger: ["log", "error", "debug", "verbose", "warn", "error"],
+  });
+
+  const config = new DocumentBuilder()
+    .setTitle('SaleX')
+    .setDescription('The SaleX API description')
+    .setVersion('1.6.0')
+    .addServer(cfg('APP_PUBLIC_ENDPOINT'))
+    .addBearerAuth()
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
+
+  await app.listen(cfg('PORT') || 3002, () => {
+    Logger.log(
+      `Server running on http://localhost:${cfg('PORT')}\n`,
+    );
+  });
 }
 bootstrap();
