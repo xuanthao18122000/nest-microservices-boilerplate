@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, RouterModule } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { UsersModule } from './user/user.module';
 import { NestExpressApplication } from '@nestjs/platform-express';
@@ -6,6 +6,7 @@ import { AppModule } from './app.module';
 import { Logger, VersioningType } from '@nestjs/common';
 import { cfg } from './common/configs/env.config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Routes } from './routes';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -14,8 +15,8 @@ async function bootstrap() {
   });
 
   const config = new DocumentBuilder()
-    .setTitle('SaleX')
-    .setDescription('The SaleX API description')
+    .setTitle('Users Microservices')
+    .setDescription('The Users Microservices API description')
     .setVersion('1.6.0')
     .addServer(cfg('APP_PUBLIC_ENDPOINT'))
     .addBearerAuth()
@@ -31,7 +32,7 @@ async function bootstrap() {
     origin: "*",
     credentials: true,
   });
-
+  RouterModule.register(Routes)
   await app.listen(cfg('PORT') || 3002, () => {
     Logger.log(
       `Server running on http://localhost:${cfg('PORT')}\n`,

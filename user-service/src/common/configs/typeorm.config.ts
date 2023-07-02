@@ -1,6 +1,7 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { join } from 'path';
 import { cfg } from './env.config';
+import { User } from 'src/database/schema';
 
 export const dataSourceOptions: DataSourceOptions = {
 	type: cfg('DB_DRIVER'),
@@ -12,7 +13,7 @@ export const dataSourceOptions: DataSourceOptions = {
 	logging: true,
 	synchronize: true,
 	migrationsRun: false,
-	entities: [join(__dirname, '/database/entities/*.entity{.ts,.js}')],
+	entities: [User], // join(__dirname, '/database/entities/*.entity{.ts,.js}')
 	migrations: [join(__dirname, 'database/migrations/*.{js,ts}')],
 };
 
