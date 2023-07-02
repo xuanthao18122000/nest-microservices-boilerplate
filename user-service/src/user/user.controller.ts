@@ -17,16 +17,19 @@ export class UsersController {
 
   @Get(':id')
   async getOneUser(@Param('id') id: number) {
-    return await this.usersService.getOne(id);
+    const user = await this.usersService.getOne(id);
+    return SendResponse.success(user, 'Get detail user successful')
   }
 
   @Post()
   async createUser(@Body() body: CreateUserDto) {
-    return await this.usersService.create(body);
+    const user = await this.usersService.create(body);
+    return SendResponse.success([], 'Create user successful')
   }
 
   @Put()
   async updateUser(@Param('id') id: number, @Body() body: UpdateUserDto) {
-    return await this.usersService.update(id, body);
+    const user = await this.usersService.update(id, body);
+    return SendResponse.success([], 'Update user successful')
   }
 }
