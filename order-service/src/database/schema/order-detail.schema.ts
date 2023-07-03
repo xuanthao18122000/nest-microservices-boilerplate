@@ -7,10 +7,13 @@ import {
 } from 'typeorm';
 import { BaseEntity } from './base.schema';
 
-@Entity({ name: 'orders' })
+@Entity({ name: 'order_details' })
 export class OrderDetail extends BaseEntity {
   @Column()
   unitPrice: string;
+
+  @Column({ type: 'float'})
+  detailPrice: number;
 
   @Column({ type: 'int', default: -1 })
   quantity: number;
@@ -22,10 +25,10 @@ export class OrderDetail extends BaseEntity {
   status: number;
 
   @Column({ type: 'int', default: -1 })
-  product_id: number;
+  productId: number;
 
   @Column({ type: 'int', default: -1 })
-  order_id: number;
+  orderId: number;
 
   // constructor(data: any = null) {
   //   if (data) {

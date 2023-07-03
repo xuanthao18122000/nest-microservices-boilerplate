@@ -31,6 +31,27 @@ async function bootstrap() {
     origin: "*",
     credentials: true,
   });
+
+  const user = process.env.USER_RABBIT;
+  const pwd = process.env.PASSWORD_RABBIT;
+  const host = process.env.HOST_RABBIT;
+  const port = process.env.PORT_RABBIT;
+
+  await app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: [`amqp://${user}:${pwd}@${host}:${port}`],
+      port: process.env.PORT_RABBIT,
+      queue: 'PRODUCT_QUEUE',
+      noAck: false,
+      queueOptions: {
+        durable: true,
+      },
+      prefetchCount: 5,
+    },
+  });
+  
+
   RouterModule.register(Routes)
   await app.listen(cfg('PORT') || 3004, () => {
     Logger.log(

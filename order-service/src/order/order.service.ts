@@ -4,7 +4,6 @@ import { ErrorException } from 'src/common/response/error-payload.dto';
 import code from 'src/common/response/status-code';
 import { Order } from 'src/database/schema';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { CreateOrderDto, ListOrderDto, UpdateOrderDto } from './dto/order.dto';
 @Injectable()
 export class OrdersService {
@@ -13,17 +12,13 @@ export class OrdersService {
     private orderRepo: Repository<Order>,
   ) {}
 
-  public hashPassword(password: string) {
-    return bcrypt.hashSync(password, 12);
-  }
-
   async getAll(query: ListOrderDto) {
     const { page, perPage } = query;
     const [list, total] = await this.orderRepo
       .createQueryBuilder('order')
       .getManyAndCount();
 
-    return { list, total, page, perPage };
+    return { list, total, page: page/1, perPage: perPage/1 };
   }
 
   async getOne(id: number): Promise<Order | any> {

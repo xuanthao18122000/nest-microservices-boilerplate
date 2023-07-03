@@ -24,6 +24,40 @@ import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservi
     ]),
   ],
   controllers: [OrdersController],
-  providers: [OrdersService],
+  providers: [
+    OrdersService,
+    {
+      provide: "PRODUCT_SERVICE",
+      useFactory: (configService: ConfigService) =>
+        ClientProxyFactory.create({
+          transport: Transport.RMQ,
+          options: {
+            urls: [process.env.RABBIT_MQ_URL],
+            queue: "PRODUCT",
+            noAck: false,
+            queueOptions: {
+              durable: false,
+            },
+          },
+        }),
+      inject: [ConfigService],
+    },
+    {
+      provide: "USER_SERVICE",
+      useFactory: (configService: ConfigService) =>
+        ClientProxyFactory.create({
+          transport: Transport.RMQ,
+          options: {
+            urls: [process.env.RABBIT_MQ_URL],
+            queue: "USER",
+            noAck: false,
+            queueOptions: {
+              durable: false,
+            },
+          },
+        }),
+      inject: [ConfigService],
+    },
+  ],
 })
 export class OrdersModule {}

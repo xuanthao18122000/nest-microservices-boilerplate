@@ -16,6 +16,15 @@ export class Order extends BaseEntity {
   password: string;
 
   @Column({ type: 'int', default: -1 })
+  userId: number;
+
+  @Column({ default: new Date()})
+  orderDate: Date;
+
+  @Column({ nullable: true})
+  orderPhone: string;
+
+  @Column({ type: 'int', default: -1 })
   status: number;
 
   // constructor(data: any = null) {

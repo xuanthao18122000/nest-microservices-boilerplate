@@ -23,7 +23,7 @@ export class UsersService {
       .createQueryBuilder('user')
       .getManyAndCount();
 
-    return { list, total, page, perPage };
+    return { list, total, page: page/1, perPage: perPage/1  };
   }
 
   async getOne(id: number): Promise<User | any> {
