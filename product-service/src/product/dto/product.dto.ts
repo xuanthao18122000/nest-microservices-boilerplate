@@ -24,6 +24,12 @@ export class CreateProductDto {
   @IsNotEmpty()
   price: number;
 
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  @IsNotEmpty()
+  categoryId: number;
+
 }
 
 export class UpdateProductDto {
@@ -33,8 +39,26 @@ export class UpdateProductDto {
   name: string;
 
   @ApiProperty()
+  @IsEmail()
+  @IsNotEmpty()
+  code: string;
+
+  @ApiProperty()
   @Type(() => Number)
   @IsNumber()
   @IsNotEmpty()
   price: number;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  @IsNotEmpty()
+  status: number;
+
+  @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
+  @IsNotEmpty()
+  categoryId: number;
+  
 }

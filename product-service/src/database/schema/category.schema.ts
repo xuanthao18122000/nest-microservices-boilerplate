@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from './base.schema';
+import { Product } from './product.schema';
 
 @Entity({ name: 'categories' })
 export class Category extends BaseEntity {
@@ -18,15 +20,15 @@ export class Category extends BaseEntity {
   @Column({ type: 'int', default: -1 })
   status: number;
 
+  @OneToMany(() => Product, (product) => product.category)
+  products: Product[];
+
   // constructor(data: any = null) {
   //   if (data) {
   //     super()
   //     this.id = data.id || null;
-  //     this.email = data.email;
-  //     this.address = data.address;
-  //     this.fullName = data.fullName;
-  //     this.phoneNumber = data.phoneNumber;
-  //     this.gender = data.gender;
+  //     this.name = data.name;
+  //     this.logs = data.logs;
   //     this.status = data.status;
   //   }
   // }

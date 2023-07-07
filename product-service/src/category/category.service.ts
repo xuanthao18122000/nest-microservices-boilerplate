@@ -51,7 +51,7 @@ export class CategoriesService {
   }
 
   async update(id: number, body: UpdateCategoryDto): Promise<Category> {
-    const { name } = body;
+    const { name, status } = body;
 
     const category = await this.findCategoryByPk(id);
 
@@ -66,6 +66,7 @@ export class CategoriesService {
       }
       category.name = name;
     }
+    if(status) category.status = status;
 
     return await this.categoryRepo.save(category);
   }

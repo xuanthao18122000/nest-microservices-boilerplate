@@ -10,7 +10,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  async getAllproducts(@Query() query: ListProductDto) {
+  async getAllProducts(@Query() query: ListProductDto) {
     const products = await this.productsService.getAll(query);
     return SendResponse.success(products, 'Get all products successful')
   }

@@ -33,12 +33,12 @@ const code = {
 
     //Posts
     PRODUCT_NOT_FOUND: { code: 1030, type: 'PRODUCT_NOT_FOUND', msg: 'Product does not exist!' },
-    POST_NOT_FOUND: { code: 1031, type: 'POST_NOT_FOUND', msg: 'Post ID does not exist!' },
+    PRODUCT_EXISTED: { code: 1031, type: 'PRODUCT_EXISTED', msg: 'Product existed!' },
+    PRODUCT_CODE_EXISTED: { code: 1031, type: 'PRODUCT_CODE_EXISTED', msg: 'Product code existed!' },
     TYPE_CONTENT_NOT_FOUND: { code: 1032, type: 'TYPE_CONTENT_NOT_FOUND', msg: 'Type content wrong!' },
 
     // Customers
-    CUSTOMER_NOT_FOUND: { code: 1040, type: 'CUSTOMER_NOT_FOUND', msg: 'Customer ID does not exist!' },
-    CUSTOMER_CODE_EXISTED: { code: 1041, type: 'CUSTOMER_CODE_EXISTED', msg: 'Customer code existed!' },
+    
     CUSTOMER_NAME_EXISTED: { code: 1042, type: 'CUSTOMER_NAME_EXISTED', msg: 'Customer name existed!' },
 
     // Customers

@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from './base.schema';
+import { Category } from './category.schema';
 
 @Entity({ name: 'products' })
 export class Product extends BaseEntity {
@@ -21,30 +23,24 @@ export class Product extends BaseEntity {
   @Column({ type: 'numeric', nullable: true })
   price: number;
 
-  @Column({ type: 'varchar', name: 'phone_number', nullable: true })
-  phoneNumber: string;
-
-  @Column({ nullable: true })
-  token: string;
-
   @Column({ type: 'jsonb', default: { list: [] }, nullable: true })
   logs: object;
 
-  @Column({ type: 'int', nullable: true })
-  productId: number;
-
   @Column({ type: 'int', default: -1 })
   status: number;
+
+  @ManyToOne(() => Category, (category) => category.products)
+  category: Category;
 
   // constructor(data: any = null) {
   //   if (data) {
   //     super()
   //     this.id = data.id || null;
-  //     this.email = data.email;
-  //     this.address = data.address;
-  //     this.fullName = data.fullName;
-  //     this.phoneNumber = data.phoneNumber;
-  //     this.gender = data.gender;
+  //     this.name = data.name;
+  //     this.code = data.code;
+  //     this.description = data.description;
+  //     this.price = data.price;
+  //     this.logs = data.logs;
   //     this.status = data.status;
   //   }
   // }
