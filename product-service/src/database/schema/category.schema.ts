@@ -34,7 +34,10 @@ export class Category extends BaseEntity {
   serialize() {
     return {
       id: this.id,
+      name: this.name,
       status: this.status,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
     };
   }
 }
