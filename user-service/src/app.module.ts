@@ -8,6 +8,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { UsersModule } from './user/user.module';
 import { dataSourceOptions } from './common/configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
+import { EmployeesModule } from './employee/employee.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +21,7 @@ import { AuthModule } from './auth/auth.module';
     ScheduleModule.forRoot(),
     AuthModule,
     UsersModule,
+    EmployeesModule
   ],
   controllers: [AppController],
   providers: [
