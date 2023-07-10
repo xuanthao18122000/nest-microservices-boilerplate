@@ -2,33 +2,35 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from './base.schema';
+import { Order } from './order.schema';
 
 @Entity({ name: 'order_details' })
 export class OrderDetail extends BaseEntity {
-  @Column()
+  @Column({ name: 'unit_price', nullable: true })
   unitPrice: string;
 
-  @Column({ type: 'float'})
+  @Column({ name: 'detail_price', type: 'float', nullable: true })
   detailPrice: number;
 
-  @Column({ type: 'int', default: -1 })
+  @Column({ type: 'int', default: -1, nullable: true  })
   quantity: number;
 
-  @Column({ type: 'int', default: -1 })
+  @Column({ type: 'int', default: -1, nullable: true })
   discount: number;
 
-  @Column({ type: 'int', default: -1 })
+  @Column({ type: 'int', default: -1, nullable: true })
   status: number;
 
-  @Column({ type: 'int', default: -1 })
+  @Column({ type: 'int', default: -1, nullable: true })
   productId: number;
 
-  @Column({ type: 'int', default: -1 })
-  orderId: number;
+  @ManyToOne(() => Order, (order) => order.orderDetails)
+  order: Order;
 
   // constructor(data: any = null) {
   //   if (data) {

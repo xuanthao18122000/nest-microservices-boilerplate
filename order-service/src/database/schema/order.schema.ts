@@ -2,18 +2,17 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from './base.schema';
+import { OrderDetail } from './order-detail.schema';
 
 @Entity({ name: 'orders' })
 export class Order extends BaseEntity {
-  @Column()
-  email: string;
-
-  @Column({ type: 'varchar', default: '123456a@' })
-  password: string;
+  @Column({ type: 'int', nullable: true })
+  totalAmount: number;
 
   @Column({ type: 'int', default: -1 })
   userId: number;
@@ -24,8 +23,11 @@ export class Order extends BaseEntity {
   @Column({ nullable: true})
   orderPhone: string;
 
-  @Column({ type: 'int', default: -1 })
+  @Column({ type: 'int', default: 1 })
   status: number;
+
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
+  orderDetails: OrderDetail[];
 
   // constructor(data: any = null) {
   //   if (data) {

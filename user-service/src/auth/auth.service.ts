@@ -121,8 +121,11 @@ export class AuthService {
 
   }
 
-  async getProfile(){
-
+  async getProfile(id: number){
+    const user = await this.userRepo.findOneBy({
+      id: 1
+    });
+    return user.serialize();
   }
 
   async updateProfile(body){

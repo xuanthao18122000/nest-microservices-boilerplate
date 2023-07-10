@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { SendResponse } from 'src/common/response/send-response';
+import { GetUser } from 'src/common/decorators/get-user.decorator';
+import { User } from 'src/database/schema';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -39,8 +41,12 @@ export class AuthController {
   }
 
   @Get('profile')
+  @ApiBasicAuth()
   async getProfile() {
-    return this.authService.getProfile();
+    // @GetUser() user: User
+    const user = { id: 1}
+    const profile = await this.authService.getProfile(user.id);
+    return SendResponse.success(profile, 'Get profile successful!')
   }
 
   @Put('profile')
