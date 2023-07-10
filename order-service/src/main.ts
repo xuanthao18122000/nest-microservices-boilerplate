@@ -6,9 +6,10 @@ import { Logger, VersioningType } from '@nestjs/common';
 import { cfg } from './common/configs/env.config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Routes } from './routes';
+import { NestMicroserviceOptions } from '@nestjs/common/interfaces/microservices/nest-microservice-options.interface';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+  const app = await NestFactory.create(AppModule, {
     bufferLogs: true, // 👈
     logger: ["log", "error", "debug", "verbose", "warn", "error"],
   });
@@ -33,30 +34,24 @@ async function bootstrap() {
   });
 
   const user = process.env.USER_RABBIT;
-  const pwd = process.env.PASSWORD_RABBIT;
+  const password = process.env.PASSWORD_RABBIT;
   const host = process.env.HOST_RABBIT;
   const port = process.env.PORT_RABBIT;
 
-  await app.connectMicroservice({
+  await app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {
-      urls: [`amqp://${user}:${pwd}@${host}:${port}`],
-      port: process.env.PORT_RABBIT,
-      queue: 'PRODUCT_QUEUE',
-      noAck: false,
+      urls: [`amqp://${user}:${password}@${host}:${port}`],
+      queue: 'ORDER_QUEUE',
       queueOptions: {
         durable: true,
       },
-      prefetchCount: 5,
     },
   });
   
 
   RouterModule.register(Routes)
-  await app.listen(cfg('PORT') || 3004, () => {
-    Logger.log(
-      `Server running on http://localhost:${cfg('PORT')}\n`,
-    );
-  });
+  await app.startAllMicroservices();
+
 }
 bootstrap();

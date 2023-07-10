@@ -3,10 +3,11 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { dataSourceOptions } from './common/configs/typeorm.config';
 import { OrdersModule } from './order/order.module';
+import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,6 +22,27 @@ import { OrdersModule } from './order/order.module';
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: 'ORDER_SERVICE',
+      useFactory(configService: ConfigService){
+
+        const user = process.env.USER_RABBIT;
+        const password = process.env.PASSWORD_RABBIT;
+        const host = process.env.HOST_RABBIT;
+        const port = process.env.PORT_RABBIT;
+
+        return ClientProxyFactory.create({
+          transport: Transport.RMQ,
+          options: {
+            urls: [`amqp://${user}:${password}@${host}:${port}`],
+            queue: 'ORDER_QUEUE',
+            queueOptions: {
+              durable: true,
+            },
+          }
+        })
+      }
+    },
     AppService,
   ],
 })
