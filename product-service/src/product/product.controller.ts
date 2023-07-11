@@ -3,11 +3,19 @@ import { ProductsService } from './product.service';
 import { ApiTags } from '@nestjs/swagger';
 import { SendResponse } from 'src/common/response/send-response';
 import { CreateProductDto, ListProductDto, UpdateProductDto } from './dto/product.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('products')
 @ApiTags('Products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
+
+  @Get('by-category/:id')
+  @Public()
+  async getProductsByCategory(@Param('id') id: number, @Query() query: ListProductDto) {
+    const products = await this.productsService.productsByCategory(id, query);
+    return SendResponse.success(products, 'Get all products by category successful')
+  }
 
   @Get()
   async getAllProducts(@Query() query: ListProductDto) {

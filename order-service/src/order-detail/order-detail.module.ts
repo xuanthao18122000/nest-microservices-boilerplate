@@ -60,4 +60,4 @@ import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservi
     },
   ],
 })
-export class OrdersModule {}
+export class OrderDetailsModule {}

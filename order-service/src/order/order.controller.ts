@@ -1,13 +1,18 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, Put, Query } from '@nestjs/common';
 import { OrdersService } from './order.service';
 import { ApiTags } from '@nestjs/swagger';
 import { SendResponse } from 'src/common/response/send-response';
 import { CreateOrderDto, ListOrderDto, UpdateOrderDto } from './dto/order.dto';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('orders')
 @ApiTags('Orders')
 export class OrdersController {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+
+    ) {}
+
 
   @Get()
   async getAllOrders(@Query() query: ListOrderDto) {

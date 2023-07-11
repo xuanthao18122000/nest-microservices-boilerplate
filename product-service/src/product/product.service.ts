@@ -28,6 +28,16 @@ export class ProductsService {
     return { list, total, page: page / 1, perPage: perPage / 1 };
   }
 
+  async productsByCategory(categoryId: number, query: ListProductDto){
+    const { page, perPage } = query;
+    const [list, total] = await this.productRepo
+      .createQueryBuilder('product')
+      .where('product.category = :categoryId', { categoryId })
+      .getManyAndCount();
+
+    return { list, total, page: page / 1, perPage: perPage / 1 };
+  }
+
   async getOne(id: number): Promise<Product | any> {
     const product = await this.findProductByPk(id);
     return product.serialize();

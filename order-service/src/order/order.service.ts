@@ -1,16 +1,29 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorException } from 'src/common/response/error-payload.dto';
 import code from 'src/common/response/status-code';
 import { Order } from 'src/database/schema';
 import { Repository } from 'typeorm';
 import { CreateOrderDto, ListOrderDto, UpdateOrderDto } from './dto/order.dto';
+import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
     private orderRepo: Repository<Order>,
+
+    @Inject('USER_SERVICE')
+    private readonly usersService: ClientProxy,
+
+    @Inject('PRODUCT_SERVICE')
+    private readonly productsService: ClientProxy,
   ) {}
+
+  getAllUsers(query: ListOrderDto) {
+    return this.usersService.send({
+      cmd: 'get-all-user'
+    }, query)
+  }
 
   async getAll(query: ListOrderDto) {
     const { page, perPage } = query;

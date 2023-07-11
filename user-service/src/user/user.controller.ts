@@ -3,11 +3,22 @@ import { UsersService } from './user.service';
 import { ApiTags } from '@nestjs/swagger';
 import { SendResponse } from 'src/common/response/send-response';
 import { CreateUserDto, ListUserDto, UpdateUserDto } from './dto/user.dto';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @Controller('users')
 @ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @MessagePattern({ cmd: 'add-user' })
+  async addSubscriber(@Payload() createUserDto: CreateUserDto) {
+    return await this.usersService.create(createUserDto);
+  }
+
+  @MessagePattern({ cmd: 'get-all-user' })
+  async getAllSubscriber(message: ListUserDto) {
+    return await this.usersService.getAll(message);
+  }
 
   @Get()
   async getAllUsers(@Query() query: ListUserDto) {

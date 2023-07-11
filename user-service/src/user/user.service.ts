@@ -13,6 +13,10 @@ export class UsersService {
     private userRepo: Repository<User>,
   ) {}
 
+  async addSubscriber(createUserDto: CreateUserDto){
+    
+  }
+
   public hashPassword(password: string) {
     return bcrypt.hashSync(password, 12);
   }

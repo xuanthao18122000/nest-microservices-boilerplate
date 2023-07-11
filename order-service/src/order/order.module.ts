@@ -4,7 +4,11 @@ import { OrdersService } from './order.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from 'src/database/schema';
 import { ConfigService } from '@nestjs/config';
-import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
+import {
+  ClientProxyFactory,
+  ClientsModule,
+  Transport,
+} from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -27,35 +31,45 @@ import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservi
   providers: [
     OrdersService,
     {
-      provide: "PRODUCT_SERVICE",
-      useFactory: (configService: ConfigService) =>
-        ClientProxyFactory.create({
+      provide: 'USER_SERVICE',
+      useFactory: (configService: ConfigService) => {
+        const user = process.env.USER_RABBIT;
+        const password = process.env.PASSWORD_RABBIT;
+        const host = process.env.HOST_RABBIT;
+        const port = process.env.PORT_RABBIT;
+
+        return ClientProxyFactory.create({
           transport: Transport.RMQ,
           options: {
-            urls: [process.env.RABBIT_MQ_URL],
-            queue: "PRODUCT",
-            noAck: false,
+            urls: [`amqp://${user}:${password}@${host}:${port}`],
+            queue: 'USER_QUEUE',
             queueOptions: {
-              durable: false,
+              durable: true,
             },
           },
-        }),
+        });
+      },
       inject: [ConfigService],
     },
     {
-      provide: "USER_SERVICE",
-      useFactory: (configService: ConfigService) =>
-        ClientProxyFactory.create({
+      provide: 'PRODUCT_SERVICE',
+      useFactory: (configService: ConfigService) => {
+        const user = process.env.USER_RABBIT;
+        const password = process.env.PASSWORD_RABBIT;
+        const host = process.env.HOST_RABBIT;
+        const port = process.env.PORT_RABBIT;
+
+        return ClientProxyFactory.create({
           transport: Transport.RMQ,
           options: {
-            urls: [process.env.RABBIT_MQ_URL],
-            queue: "USER",
-            noAck: false,
+            urls: [`amqp://${user}:${password}@${host}:${port}`],
+            queue: 'PRODUCT_QUEUE',
             queueOptions: {
-              durable: false,
+              durable: true,
             },
           },
-        }),
+        });
+      },
       inject: [ConfigService],
     },
   ],

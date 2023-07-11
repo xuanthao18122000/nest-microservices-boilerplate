@@ -8,6 +8,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { dataSourceOptions } from './common/configs/typeorm.config';
 import { OrdersModule } from './order/order.module';
 import { ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { OrderDetailsModule } from './order-detail/order-detail.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -19,6 +20,7 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
 		}),
     ScheduleModule.forRoot(),
     OrdersModule,
+    OrderDetailsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -43,6 +45,7 @@ import { ClientProxyFactory, Transport } from '@nestjs/microservices';
         })
       }
     },
+    
     AppService,
   ],
 })
