@@ -33,7 +33,7 @@ async function bootstrap() {
   SwaggerModule.setup('order/docs', app, document);
 
   await app.startAllMicroservices();
-  await app.listen(3000);
+  await app.listen(3003);
 }
 
 bootstrap();
@@ -50,7 +50,6 @@ bootstrap();
 
 // async function bootstrap() {
 //   const app = await NestFactory.create(AppModule, {
-//     bufferLogs: true, // 👈
 //     logger: ["log", "error", "debug", "verbose", "warn", "error"],
 //   });
 

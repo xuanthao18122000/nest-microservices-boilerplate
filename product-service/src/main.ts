@@ -33,7 +33,7 @@ async function bootstrap() {
   SwaggerModule.setup('product/docs', app, document);
 
   await app.startAllMicroservices();
-  await app.listen(3002);
+  await app.listen(3001);
 }
 
 bootstrap();

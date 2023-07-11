@@ -24,9 +24,6 @@ import {
     @Column({ nullable: true })
     token: string;
   
-    @Column({ type: 'jsonb', default: { list: [] }, nullable: true })
-    logs: object;
-  
     @Column({ type: 'int', nullable: true })
     gender: number;
   

@@ -14,9 +14,6 @@ export class Category extends BaseEntity {
   @Column({ unique: true})
   name: string;
 
-  @Column({ type: 'jsonb', default: { list: [] }, nullable: true })
-  logs: object;
-
   @Column({ type: 'int', default: -1 })
   status: number;
 
@@ -28,7 +25,6 @@ export class Category extends BaseEntity {
   //     super()
   //     this.id = data.id || null;
   //     this.name = data.name;
-  //     this.logs = data.logs;
   //     this.status = data.status;
   //   }
   // }

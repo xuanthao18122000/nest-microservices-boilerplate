@@ -7,28 +7,28 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from './base.schema';
-import { Category } from './category.schema';
+import { Cart } from './cart.schema';
 
-@Entity({ name: 'products' })
-export class Product extends BaseEntity {
+@Entity({ name: 'cart_items' })
+export class CartItem extends BaseEntity {
   @Column({nullable: true })
-  name: string;
+  cart_id: string;
 
-  @Column({ unique: true})
-  code: string;
+  @Column({ name: 'product_id', type: 'int', nullable: true })
+  productId: number;
 
-  @Column({ type: 'varchar', nullable: true })
-  description: string;
+  @Column({ type: 'int', nullable: true })
+  quantity: number;
+  
+  @Column({ type: 'int', nullable: true })
+  price: number;
 
   @Column({ type: 'numeric', nullable: true })
-  price: number;
+  discount: number;
+
+  @ManyToOne(() => Cart, (cart) => cart.cartItems)
+  cart: Cart;
   
-  @Column({ type: 'int', default: -1 })
-  status: number;
-
-  @ManyToOne(() => Category, (category) => category.products)
-  category: Category;
-
   // constructor(data: any = null) {
   //   if (data) {
   //     super()
@@ -44,7 +44,7 @@ export class Product extends BaseEntity {
   serialize() {
     return {
       id: this.id,
-      status: this.status,
+      productId: this.productId,
     };
   }
 }

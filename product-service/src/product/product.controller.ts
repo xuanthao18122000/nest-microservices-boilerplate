@@ -17,6 +17,13 @@ export class ProductsController {
     return SendResponse.success(products, 'Get all products by category successful')
   }
 
+  @Get('detail/:id')
+  @Public()
+  async getDetailsProduct(@Param('id') id: number) {
+    const product = await this.productsService.getOne(id);
+    return SendResponse.success(product, 'Get detail product successful')
+  }
+
   @Get()
   async getAllProducts(@Query() query: ListProductDto) {
     const products = await this.productsService.getAll(query);
