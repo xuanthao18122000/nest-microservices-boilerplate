@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,8 +12,6 @@ import { Cart } from './cart.schema';
 
 @Entity({ name: 'cart_items' })
 export class CartItem extends BaseEntity {
-  @Column({nullable: true })
-  cart_id: string;
 
   @Column({ name: 'product_id', type: 'int', nullable: true })
   productId: number;
@@ -27,6 +26,7 @@ export class CartItem extends BaseEntity {
   discount: number;
 
   @ManyToOne(() => Cart, (cart) => cart.cartItems)
+  @JoinColumn({ name: "cart_id" })
   cart: Cart;
   
   // constructor(data: any = null) {

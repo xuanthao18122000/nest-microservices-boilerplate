@@ -13,7 +13,7 @@ import { CartItem } from './cart-item.schema';
 @Entity({ name: 'carts' })
 export class Cart extends BaseEntity {
   @Column({name: 'user_id', unique: true, nullable: true })
-  userId: string;
+  userId: number;
 
   @Column({ type: 'numeric', nullable: true })
   total: number;

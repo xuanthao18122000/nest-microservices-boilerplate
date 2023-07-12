@@ -1,11 +1,10 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query, Req } from '@nestjs/common';
 import { CartsService } from './cart.service';
 import { ApiTags } from '@nestjs/swagger';
 import { SendResponse } from 'src/common/response/send-response';
 import { CreateCartDto, ListCartDto, UpdateCartDto } from './dto/cart.dto';
-import { Public } from 'src/common/decorators/public.decorator';
+import { Request } from 'express';
 
-@Public()
 @Controller('carts')
 @ApiTags('Carts')
 export class CartsController {
@@ -13,13 +12,14 @@ export class CartsController {
 
   @Get()
   async getListCart(@Query() query: ListCartDto) {
-    const carts = await this.cartsService.getAll(query);
+    const carts = await this.cartsService.getCarts(query);
     return SendResponse.success(carts, 'Get list carts successful')
   }
 
   @Post()
-  async addToCart(@Body() body: CreateCartDto) {
-    const cart = await this.cartsService.create(body);
+  async addToCart(@Body() body: CreateCartDto, @Req() req: Request) {
+    const userId = req['user']?.id
+    const cart = await this.cartsService.create(userId, body);
     return SendResponse.success(cart, 'Create cart successful')
   }
 
