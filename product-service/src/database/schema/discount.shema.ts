@@ -3,47 +3,30 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { BaseEntity } from './base.schema';
 import { Category } from './category.schema';
-import { Discount } from './discount.shema';
+import { Product } from './product.schema';
 
-@Entity({ name: 'products' })
-export class Product extends BaseEntity {
+@Entity({ name: 'discount' })
+export class Discount extends BaseEntity {
   @Column({nullable: true })
   name: string;
-
-  @Column({ unique: true})
-  code: string;
-
-  // @Column({ type: 'jsonb', unique: true})
-  // images: object;
 
   @Column({ type: 'varchar', nullable: true })
   description: string;
 
-  @Column({ type: 'numeric', nullable: true })
-  price: number;
-
-  @Column({ default: 0 })
-  sellNumber: number;
-
-  @Column({ default: 0 })
-  reviewNumber: number;
-
-  @Column({ type: 'numeric', default: 0 })
-  stars: number;
+  @Column({ name: 'discount_percent', type: 'numeric', nullable: true })
+  discountPercent: number;
   
   @Column({ type: 'int', default: -1 })
   status: number;
 
-  @ManyToOne(() => Category, (category) => category.products)
-  category: Category;
-
-  @ManyToOne(() => Discount, (discount) => discount.products)
-  discount: Discount;
+  @OneToMany(() => Product, (product) => product.discount)
+  products: Product;
 
   // constructor(data: any = null) {
   //   if (data) {
@@ -61,9 +44,7 @@ export class Product extends BaseEntity {
     return {
       id: this.id,
       name: this.name,
-      code: this.code,
       description: this.description,
-      price: this.price,
       status: this.status,
     };
   }

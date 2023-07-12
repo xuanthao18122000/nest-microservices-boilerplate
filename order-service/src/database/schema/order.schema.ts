@@ -1,4 +1,5 @@
 import {
+  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
@@ -11,6 +12,9 @@ import { OrderDetail } from './order-detail.schema';
 
 @Entity({ name: 'orders' })
 export class Order extends BaseEntity {
+  @Column({ unique: true, nullable: true})
+  code: string;
+
   @Column({ type: 'int', nullable: true })
   totalAmount: number;
 

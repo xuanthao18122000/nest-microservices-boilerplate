@@ -2,6 +2,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { join } from 'path';
 import { cfg } from './env.config';
 import { Category, Product } from 'src/database/schema';
+import { Discount } from 'src/database/schema/discount.shema';
 
 export const dataSourceOptions: DataSourceOptions = {
 	type: cfg('DB_DRIVER'),
@@ -13,7 +14,7 @@ export const dataSourceOptions: DataSourceOptions = {
 	logging: true,
 	synchronize: true,
 	migrationsRun: false,
-	entities: [Product, Category], // join(__dirname, '/database/entities/*.entity{.ts,.js}')
+	entities: [Product, Category, Discount], // join(__dirname, '/database/entities/*.entity{.ts,.js}')
 	migrations: [join(__dirname, 'database/migrations/*.{js,ts}')],
 };
 

@@ -39,9 +39,30 @@ export class OrdersService {
     return order.serialize();
   }
 
+  async generateCode() {
+    const latestOrder = await this.orderRepo.findOne({
+      order: {
+        code: 'DESC',
+      },
+    });
+
+    const latestCode = latestOrder.code;
+    let code: string;
+    if (latestCode) {
+      const codeNumber = parseInt(latestCode.substr(1)); // Lấy phần số từ mã hiện tại
+      const nextCodeNumber = codeNumber + 1;
+      const nextCode = `#${nextCodeNumber.toString().padStart(4, '0')}`; // Định dạng lại mã tiếp theo
+      code = nextCode;
+    } else {
+      code = '#0001'; // Giá trị mặc định cho trường code nếu không có bất kỳ đơn hàng nào trong cơ sở dữ liệu
+    }
+    return code;
+  }
+
   async create(body: CreateOrderDto) {
     const { } = body;
 
+    const code = await this.generateCode();
     return await this.orderRepo.save({
       status: 1,
     });
