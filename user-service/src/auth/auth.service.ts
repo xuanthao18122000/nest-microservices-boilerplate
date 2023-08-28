@@ -7,6 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
 import { ErrorException } from 'src/common/response/error-payload.dto';
 import code from 'src/common/response/status-code';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -119,6 +120,26 @@ export class AuthService {
 
   async changPassword(body){
 
+  }
+
+  async googleLogin(req: Request) {
+    if (!req.user) {
+      throw 'No user from google'
+    }
+
+    return {
+      user: req.user
+    }
+  }
+
+  async googleFacebook(req: Request) {
+    if (!req.user) {
+      throw 'No user from facebook'
+    }
+
+    return {
+      user: req.user
+    }
   }
 
   async getProfile(id: number){
