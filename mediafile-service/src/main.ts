@@ -14,7 +14,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: [`amqp://${user}:${password}@${host}:${port}`],
-      queue: 'CART_QUEUE',
+      queue: 'MEDIA_FILE_QUEUE',
       queueOptions: {
         durable: true,
       },
@@ -24,13 +24,13 @@ async function bootstrap() {
   app.connectMicroservice(microserviceOptions);
 
   const config = new DocumentBuilder()
-    .setTitle('Products Microservice')
-    .setDescription('API description for Products Microservice')
+    .setTitle('Mediafile Microservice')
+    .setDescription('API description for Mediafile Microservice')
     .setVersion('1.0')
 
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('product/docs', app, document);
+  SwaggerModule.setup('mediafile/docs', app, document);
 
   await app.startAllMicroservices();
   await app.listen(3005);
