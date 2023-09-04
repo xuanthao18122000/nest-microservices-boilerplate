@@ -32,6 +32,9 @@ import {
   
     @Column({ type: 'int', default: -1 })
     status: number;
+
+    @Column({ type: 'varchar', nullable: true })
+    avatar: string;
   
     public updatedAt: Date;
   

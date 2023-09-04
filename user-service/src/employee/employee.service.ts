@@ -5,7 +5,11 @@ import code from 'src/common/response/status-code';
 import { Employee } from 'src/database/schema';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { CreateEmployeeDto, ListEmployeeDto, UpdateEmployeeDto } from './dto/employee.dto';
+import {
+  CreateEmployeeDto,
+  ListEmployeeDto,
+  UpdateEmployeeDto,
+} from './dto/employee.dto';
 @Injectable()
 export class EmployeesService {
   constructor(
@@ -21,9 +25,21 @@ export class EmployeesService {
     const { page, perPage } = query;
     const [list, total] = await this.employeeRepo
       .createQueryBuilder('employee')
+      .select([
+        'employee.id',
+        'employee.fullName',
+        'employee.email',
+        'employee.avatar',
+        'employee.phoneNumber',
+        'employee.gender',
+        'employee.address',
+        'employee.status',
+        'employee.createdAt',
+        'employee.updatedAt',
+      ])
       .getManyAndCount();
 
-    return { list, total, page: page/1, perPage: perPage/1  };
+    return { list, total, page: +page, perPage: +perPage };
   }
 
   async getOne(id: number): Promise<Employee | any> {
@@ -51,22 +67,22 @@ export class EmployeesService {
       phoneNumber,
       status: 1,
       fullName,
-      gender
+      gender,
     });
   }
 
   async update(id: number, body: UpdateEmployeeDto): Promise<Employee> {
     const { fullName, phoneNumber, gender, address } = body;
     const employee = await this.findEmployeeByPk(id);
-    if(fullName) employee.fullName = fullName;
-    if(phoneNumber) employee.phoneNumber = phoneNumber;
-    if(gender) employee.gender = gender;
-    if(address) employee.address = address;
+    if (fullName) employee.fullName = fullName;
+    if (phoneNumber) employee.phoneNumber = phoneNumber;
+    if (gender) employee.gender = gender;
+    if (address) employee.address = address;
 
     return await this.employeeRepo.save(employee);
   }
 
-  async findEmployeeByPk(id: number): Promise<Employee>{
+  async findEmployeeByPk(id: number): Promise<Employee> {
     const employee = await this.employeeRepo.findOneBy({ id });
     if (!employee) {
       throw new ErrorException(
@@ -75,6 +91,6 @@ export class EmployeesService {
         code['EMPLOYEE_NOT_FOUND'].type,
       );
     }
-    return employee
+    return employee;
   }
 }

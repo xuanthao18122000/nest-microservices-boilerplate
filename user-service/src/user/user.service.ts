@@ -25,6 +25,18 @@ export class UsersService {
     const { page, perPage } = query;
     const [list, total] = await this.userRepo
       .createQueryBuilder('user')
+      .select([
+        'user.id',
+        'user.fullName',
+        'user.email',
+        'user.avatar',
+        'user.phoneNumber',
+        'user.gender',
+        'user.address',
+        'user.status',
+        'user.createdAt',
+        'user.updatedAt',
+      ])
       .getManyAndCount();
 
     return { list, total, page: page/1, perPage: perPage/1  };

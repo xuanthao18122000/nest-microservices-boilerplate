@@ -30,6 +30,9 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   address: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  avatar: string;
+
   @Column({ type: 'int', default: -1 })
   status: number;
 
