@@ -7,9 +7,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from '../services/auth.service';
 import { ApiBasicAuth, ApiTags } from '@nestjs/swagger';
-import { LoginDto, RegisterDto } from './dto/auth.dto';
+import { LoginDto, RegisterDto } from '../dto/auth.dto';
 import { SendResponse } from 'src/common/response/send-response';
 import { GetUser } from 'src/common/decorators/get-user.decorator';
 import { User } from 'src/database/schema';
@@ -17,7 +17,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
 @Controller('auth')
-@ApiTags('Auth')
+@ApiTags('[USER] Auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
@@ -45,7 +45,7 @@ export class AuthController {
   @Get("login/facebook/redirect")
   @UseGuards(AuthGuard("facebook"))
   async facebookLoginRedirect(@Req() req: Request): Promise<any> {
-    const data = await this.authService.googleLogin(req);
+    const data = await this.authService.facebookLogin(req);
     return SendResponse.success(data, 'Get user information from facebook successful!');
   }
 

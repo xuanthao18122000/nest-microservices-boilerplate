@@ -9,7 +9,6 @@ export class FacebookStrategy extends PassportStrategy(Strategy, "facebook") {
       clientID: process.env.FACEBOOK_CLIENT_ID || ' ',
       clientSecret: process.env.FACEBOOK_SECRET,
       callbackURL: process.env.FACEBOOK_CALLBACK_URL,
-      // scope: "email",
       profileFields: ["emails", "name"],
     });
   }
@@ -17,16 +16,16 @@ export class FacebookStrategy extends PassportStrategy(Strategy, "facebook") {
   async validate(
     accessToken: string,
     refreshToken: string,
-    profile: Profile,
+    profile: any,
     done: (err: any, user: any, info?: any) => void
   ): Promise<any> {
-    console.log(profile);
-    
-    const { name, emails } = profile;
+    const { id, name, emails, gender } = profile;
     const user = {
+      id,
       email: emails?.value,
       firstName: name.givenName,
       lastName: name.familyName,
+      gender,
     };
     const payload = {
       user,

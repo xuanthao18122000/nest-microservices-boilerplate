@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ProductsController } from './product.controller';
-import { ProductsService } from './product.service';
+import { ProductsController } from './controllers/product.controller';
+import { ProductsService } from './services/product.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Category, Product } from 'src/database/schema';
 import { ConfigService } from '@nestjs/config';

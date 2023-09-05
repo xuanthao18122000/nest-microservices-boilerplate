@@ -5,8 +5,8 @@ import { SendResponse } from 'src/common/response/send-response';
 import { CreateUserDto, ListUserDto, UpdateUserDto } from './dto/user.dto';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 
-@Controller('users')
-@ApiTags('Users')
+@Controller('admin/users')
+@ApiTags('[ADMIN] Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 

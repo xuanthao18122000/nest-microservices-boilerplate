@@ -4,8 +4,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { SendResponse } from 'src/common/response/send-response';
 import { CreateEmployeeDto, ListEmployeeDto, UpdateEmployeeDto } from './dto/employee.dto';
 
-@Controller('employees')
-@ApiTags('Employees')
+@Controller('admin/employees')
+@ApiTags('[ADMIN] Employees')
 export class EmployeesController {
   constructor(private readonly employeesService: EmployeesService) {}
 
