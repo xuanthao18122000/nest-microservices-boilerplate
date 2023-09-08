@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { OrdersController } from './order.controller';
-import { OrdersService } from './order.service';
+import { OrdersController } from './controllers/order.controller';
+import { OrdersService } from './services/order.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Order } from 'src/database/schema';
+import { Order, OrderDetail } from 'src/database/schema';
 import { ConfigService } from '@nestjs/config';
 import {
   ClientProxyFactory,
@@ -12,7 +12,7 @@ import {
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order]),
+    TypeOrmModule.forFeature([Order, OrderDetail]),
     ClientsModule.register([
       {
         transport: Transport.RMQ,

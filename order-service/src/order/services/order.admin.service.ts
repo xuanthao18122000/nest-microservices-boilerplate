@@ -4,10 +4,10 @@ import { ErrorException } from 'src/common/response/error-payload.dto';
 import code from 'src/common/response/status-code';
 import { Order } from 'src/database/schema';
 import { Repository } from 'typeorm';
-import { CreateOrderDto, ListOrderDto, UpdateOrderDto } from './dto/order.dto';
+import { CreateOrderDto, ListOrderDto, UpdateOrderDto } from '../dto/order.dto';
 import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
-export class OrdersService {
+export class OrdersAdminService {
   constructor(
     @InjectRepository(Order)
     private orderRepo: Repository<Order>,

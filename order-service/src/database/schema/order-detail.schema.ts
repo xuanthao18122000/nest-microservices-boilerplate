@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -30,20 +31,7 @@ export class OrderDetail extends BaseEntity {
   productId: number;
 
   @ManyToOne(() => Order, (order) => order.orderDetails)
-  order: Order;
-
-  // constructor(data: any = null) {
-  //   if (data) {
-  //     super()
-  //     this.id = data.id || null;
-  //     this.email = data.email;
-  //     this.address = data.address;
-  //     this.fullName = data.fullName;
-  //     this.phoneNumber = data.phoneNumber;
-  //     this.gender = data.gender;
-  //     this.status = data.status;
-  //   }
-  // }
+  order: Order; 
 
   serialize() {
     return {

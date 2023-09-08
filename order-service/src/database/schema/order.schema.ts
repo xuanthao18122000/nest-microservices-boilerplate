@@ -27,24 +27,17 @@ export class Order extends BaseEntity {
   @Column({ nullable: true})
   orderPhone: string;
 
+  @Column({ type: 'text', nullable: true})
+  note: string;
+
   @Column({ type: 'int', default: 1 })
   status: number;
 
+  @Column({ type: 'jsonb', default: { list: []} })
+  extra: object;
+
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
   orderDetails: OrderDetail[];
-
-  // constructor(data: any = null) {
-  //   if (data) {
-  //     super()
-  //     this.id = data.id || null;
-  //     this.email = data.email;
-  //     this.address = data.address;
-  //     this.fullName = data.fullName;
-  //     this.phoneNumber = data.phoneNumber;
-  //     this.gender = data.gender;
-  //     this.status = data.status;
-  //   }
-  // }
 
   serialize() {
     return {
