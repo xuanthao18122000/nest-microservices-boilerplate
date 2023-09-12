@@ -15,7 +15,7 @@ export class UsersService {
     @InjectRepository(User)
     private userRepo: Repository<User>,
 
-    private filterBuilderService: FilterBuilderService,
+    private _filterBuilder: FilterBuilderService,
   ) {}
 
   async addSubscriber(createUserDto: CreateUserDto) {}
@@ -28,18 +28,7 @@ export class UsersService {
     const { page, perPage } = query;
 
     query.filter = {
-      selectFields: [
-        'id',
-        'fullName',
-        'email',
-        'avatar',
-        'phoneNumber',
-        'gender',
-        'address',
-        'status',
-        'createdAt',
-        'updatedAt',
-      ],
+      selectFields: ['id', 'fullName', 'email', 'avatar', 'phoneNumber', 'gender', 'address', 'status', 'createdAt', 'updatedAt'],
       unaccentFields: ['fullName'],
       numberFields: [],
       stringFields: ['phoneNumber'],
@@ -51,9 +40,9 @@ export class UsersService {
       sortName: 'Id',
     };
 
-    const entityName = 'user';
+    const entityName = 'users';
     const queryBuilder = this.userRepo.createQueryBuilder(entityName);
-    const users = this.filterBuilderService.buildQuery(
+    const users = this._filterBuilder.buildQuery(
       User,
       entityName,
       queryBuilder,
