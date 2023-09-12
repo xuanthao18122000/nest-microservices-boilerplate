@@ -1,10 +1,18 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
-import { IsEmail, IsIn, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsEmail, IsIn, IsInt, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { CustomBaseFilter } from "src/common/share/custom-base.filter";
 
 export class ListUserDto extends CustomBaseFilter {
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  fullName: string;
 
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  phoneNumber: string;
 }
 
 export class CreateUserDto {

@@ -1,7 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsObject, IsString, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsObject, IsString, Min, IsEnum, IsBoolean } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { SortOrder } from '../enums/query.enum'
+import { IQueryBuilder } from '../interfaces';
 
 export class CustomBaseFilter {
   @ApiProperty({
@@ -28,7 +30,7 @@ export class CustomBaseFilter {
 
   @ApiProperty({
     description: 'Filter Fields',
-    example: { name: 'Nhan Dang, bp, vn,...' },
+    example: { name: '' },
     required: false,
   })
   @Transform(({ value }) => {
@@ -42,12 +44,16 @@ export class CustomBaseFilter {
     message: 'Invalid filter',
   })
   @IsOptional()
-  filter: Record<string, any> = {};
+  filter: IQueryBuilder;
 
-  @Expose()
-  // @ApiProperty({ example: '"ASC" | "DESC"', required: false })
-  @IsString()
-  // @IsIn(config.SORT_TYPE.value)
+  @ApiProperty({ required: false })
+  @IsNumber()
   @IsOptional()
-  public sort: string;
+  @IsEnum(SortOrder, { message: 'Sort must be either "ASC" or "DESC"' })
+  sort: string;
+
+  @ApiProperty({ example: false, required: false })
+  @IsBoolean()
+  @IsOptional()
+  getFull: boolean;
 }

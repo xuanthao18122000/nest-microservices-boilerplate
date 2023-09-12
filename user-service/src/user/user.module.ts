@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/database/schema';
 import { ConfigService } from '@nestjs/config';
 import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservices';
+import FilterBuilderService from 'src/common/filter-builder/filter-builder.service';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { ClientProxyFactory, ClientsModule, Transport } from '@nestjs/microservi
     ]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, FilterBuilderService],
 })
 export class UsersModule {}

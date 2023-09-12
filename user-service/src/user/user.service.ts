@@ -3,19 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorException } from 'src/common/response/error-payload.dto';
 import code from 'src/common/response/status-code';
 import { User } from 'src/database/schema';
-import { Repository } from 'typeorm';
+import { ILike, IsNull, Not, Repository, SelectQueryBuilder } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto, ListUserDto, UpdateUserDto } from './dto/user.dto';
+import FilterBuilderService from 'src/common/filter-builder/filter-builder.service';
+import { IDateQuery } from 'src/common/interfaces';
+
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepo: Repository<User>,
+
+    private filterBuilderService: FilterBuilderService,
   ) {}
 
-  async addSubscriber(createUserDto: CreateUserDto){
-    
-  }
+  async addSubscriber(createUserDto: CreateUserDto) {}
 
   public hashPassword(password: string) {
     return bcrypt.hashSync(password, 12);
@@ -23,23 +26,43 @@ export class UsersService {
 
   async getAll(query: ListUserDto) {
     const { page, perPage } = query;
-    const [list, total] = await this.userRepo
-      .createQueryBuilder('user')
-      .select([
-        'user.id',
-        'user.fullName',
-        'user.email',
-        'user.avatar',
-        'user.phoneNumber',
-        'user.gender',
-        'user.address',
-        'user.status',
-        'user.createdAt',
-        'user.updatedAt',
-      ])
-      .getManyAndCount();
 
-    return { list, total, page: page/1, perPage: perPage/1  };
+    query.filter = {
+      selectFields: [
+        'id',
+        'fullName',
+        'email',
+        'avatar',
+        'phoneNumber',
+        'gender',
+        'address',
+        'status',
+        'createdAt',
+        'updatedAt',
+      ],
+      unaccentFields: ['fullName'],
+      numberFields: [],
+      stringFields: ['phoneNumber'],
+      dateFields: {
+        dateName: 'createdAt',
+        startDateField: 'startDate',
+        endDateField: 'endDate',
+      },
+      sortName: 'Id',
+    };
+
+    const entityName = 'user';
+    const queryBuilder = this.userRepo.createQueryBuilder(entityName);
+    const users = this.filterBuilderService.buildQuery(
+      User,
+      entityName,
+      queryBuilder,
+      query,
+    );
+
+    const [list, total] = await users.getManyAndCount();
+
+    return { list, total, page: page / 1, perPage: perPage / 1 };
   }
 
   async getOne(id: number): Promise<User | any> {
@@ -67,22 +90,22 @@ export class UsersService {
       phoneNumber,
       status: 1,
       fullName,
-      gender
+      gender,
     });
   }
 
   async update(id: number, body: UpdateUserDto): Promise<User> {
     const { fullName, phoneNumber, gender, address } = body;
     const user = await this.findUserByPk(id);
-    if(fullName) user.fullName = fullName;
-    if(phoneNumber) user.phoneNumber = phoneNumber;
-    if(gender) user.gender = gender;
-    if(address) user.address = address;
+    if (fullName) user.fullName = fullName;
+    if (phoneNumber) user.phoneNumber = phoneNumber;
+    if (gender) user.gender = gender;
+    if (address) user.address = address;
 
     return await this.userRepo.save(user);
   }
 
-  async findUserByPk(id: number): Promise<User>{
+  async findUserByPk(id: number): Promise<User> {
     const user = await this.userRepo.findOneBy({ id });
     if (!user) {
       throw new ErrorException(
@@ -91,6 +114,6 @@ export class UsersService {
         code['USER_NOT_FOUND'].type,
       );
     }
-    return user
+    return user;
   }
 }
