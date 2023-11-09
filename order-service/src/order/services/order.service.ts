@@ -41,7 +41,7 @@ export class OrdersService {
     return { list, total, page: +page, perPage: +perPage };
   }
 
-  async getOne(id: number): Promise<Order | any> {
+  async getOne(id: number): Promise<Partial<Order>> {
     const order = await this.findOrderByPk(id);
     return order.serialize();
   }

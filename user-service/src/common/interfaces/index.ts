@@ -1,10 +1,10 @@
-export interface IDateQuery {
+interface IDateQuery {
   dateName: string;
   startDateField: string;
   endDateField: string;
 }
 
-export interface IQueryBuilder {
+interface IQueryBuilder {
   selectFields: string[],
   unaccentFields: string[],
   numberFields: number[],
@@ -12,3 +12,5 @@ export interface IQueryBuilder {
   dateFields: IDateQuery,
   sortName: string,
 }
+
+export { IQueryBuilder, IDateQuery }

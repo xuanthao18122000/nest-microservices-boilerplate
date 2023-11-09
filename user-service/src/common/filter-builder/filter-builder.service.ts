@@ -23,14 +23,14 @@ export default class FilterBuilderService {
       },
       page: 0,
       perPage: 10000,
-      getFull: false,
       sort: 'DESC'
     },
   ): SelectQueryBuilder<T> {
     const instance = new Class({});
-    let { filter, page, perPage, getFull, sort } = query;
+    let { filter, page, perPage, sort } = query;
     const { dateFields, numberFields, selectFields, stringFields, unaccentFields, sortName } = filter;
 
+    // Loại bỏ các thuộc tính không có trong instance
     Object.entries(filter).map(([property, value]) => {
       if (instance.hasOwnProperty(property)) {
         queryBuilder.andWhere({
@@ -84,7 +84,7 @@ export default class FilterBuilderService {
       });
     }
     
-    if (!getFull) {
+    if (typeof page === "number") {
       if (page && perPage) page = (page - 1) * perPage;
       queryBuilder.skip(page);
 

@@ -51,7 +51,7 @@ export class UsersService {
 
     const [list, total] = await users.getManyAndCount();
 
-    return { list, total, page: page / 1, perPage: perPage / 1 };
+    return { list, total, page: Number(page) / 1, perPage: perPage / 1 };
   }
 
   async getOne(id: number): Promise<User | any> {

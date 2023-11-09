@@ -1,0 +1,28 @@
+services:
+  user-service:
+    build:
+      context: .
+      dockerfile: ./user-service/Dockerfile
+    env_file:
+      - ./user-service/.env
+    depends_on:
+      - rabbitmq
+    ports:
+      - '3001:3001'
+
+  product-service:
+    build:
+      context: .
+      dockerfile: ./product-service/Dockerfile
+    ports:
+      - '3002:3002'
+    env_file:
+      - ./product-service/.env
+    depends_on:
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq
+    ports:
+      - '5672:5672'
+
