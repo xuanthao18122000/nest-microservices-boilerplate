@@ -14,9 +14,9 @@ import { CreateOrderDto, ListOrderDto, UpdateOrderDto } from '../dto/order.dto';
 import { ClientProxy } from '@nestjs/microservices';
 import { OrdersAdminService } from '../services/order.admin.service';
 
-@Controller('orders')
-@ApiTags('Orders')
-export class OrdersController {
+@Controller('admin/orders')
+@ApiTags('[Admin] Orders')
+export class OrdersAdminController {
   constructor(private readonly ordersAdminService: OrdersAdminService) {}
 
   @Get()

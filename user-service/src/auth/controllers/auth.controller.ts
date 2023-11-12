@@ -75,7 +75,7 @@ export class AuthController {
   @Get('profile')
   @ApiBasicAuth()
   async getProfile(@GetUser() user: User) {
-    const profile = await this.authService.getProfile(user.id);
+    const profile = await this.authService.getProfile(user?.id);
     return SendResponse.success(profile, 'Get profile successful!');
   }
 

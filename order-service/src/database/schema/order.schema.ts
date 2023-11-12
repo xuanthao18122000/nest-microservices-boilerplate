@@ -42,7 +42,16 @@ export class Order extends BaseEntity {
   serialize() {
     return {
       id: this.id,
+      code: this.code,
+      totalAmount: this.totalAmount,
+      userId: this.userId,
+      orderDate: this.orderDate,
+      orderPhone: this.orderPhone,
+      note: this.note,
       status: this.status,
+      orderDetails: this.orderDetails,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
     };
   }
 }

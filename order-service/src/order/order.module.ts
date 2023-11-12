@@ -9,6 +9,8 @@ import {
   ClientsModule,
   Transport,
 } from '@nestjs/microservices';
+import { OrdersAdminController } from './controllers/order.admin.controller';
+import { OrdersAdminService } from './services/order.admin.service';
 
 @Module({
   imports: [
@@ -27,9 +29,10 @@ import {
       },
     ]),
   ],
-  controllers: [OrdersController],
+  controllers: [OrdersController, OrdersAdminController],
   providers: [
     OrdersService,
+    OrdersAdminService,
     {
       provide: 'USER_SERVICE',
       useFactory: (configService: ConfigService) => {

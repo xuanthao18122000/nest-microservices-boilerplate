@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ErrorException } from 'src/common/response/error-payload.dto';
 import code from 'src/common/response/status-code';
 import { Order, OrderDetail } from 'src/database/schema';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { CreateOrderDto, ListOrderDto, UpdateOrderDto } from '../dto/order.dto';
 import { ClientProxy } from '@nestjs/microservices';
 @Injectable()
@@ -35,14 +35,21 @@ export class OrdersService {
     const { page, perPage } = query;
     const [list, total] = await this.orderRepo
       .createQueryBuilder('order')
-      .where('order.userId = :userId', { userId })
+      .where('order.userId = :userId', { userId: -1 })
+      .leftJoinAndSelect('order.orderDetails', 'orderDetails  ')
       .getManyAndCount();
 
     return { list, total, page: +page, perPage: +perPage };
   }
 
-  async getOne(id: number): Promise<Partial<Order>> {
-    const order = await this.findOrderByPk(id);
+  async getOne(id: number): Promise<Order | any> {
+    const order = await this.orderRepo
+    .createQueryBuilder('order')
+    .where('order.userId = :userId', { userId: -1 })
+    .andWhere('order.id = :id', { id })
+    .leftJoinAndSelect('order.orderDetails', 'orderDetails')
+    .getOne();
+
     return order.serialize();
   }
 
@@ -51,18 +58,18 @@ export class OrdersService {
       order: {
         code: 'DESC',
       },
+      where: {
+        code: Not(IsNull()),
+      },
     });
+    if (!latestOrder) {
+      return '#0001';
+    }
 
     const latestCode = latestOrder.code;
-    let code: string;
-    if (latestCode) {
-      const codeNumber = parseInt(latestCode.substr(1));
-      const nextCodeNumber = codeNumber + 1;
-      const nextCode = `#${nextCodeNumber.toString().padStart(4, '0')}`;
-      code = nextCode;
-    } else {
-      code = '#0001';
-    }
+    const codeNumber = parseInt(latestCode.substr(1));
+    const nextCodeNumber = codeNumber + 1;
+    const code = `#${nextCodeNumber.toString().padStart(4, '0')}`;
     return code;
   }
 
@@ -71,6 +78,7 @@ export class OrdersService {
 
     const code = await this.generateCode();
     const orderData = this.orderRepo.create({
+      code,
       orderDate: new Date(),
       note,
       status: 1,
